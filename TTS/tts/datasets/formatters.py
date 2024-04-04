@@ -12,6 +12,29 @@ from tqdm import tqdm
 # DATASETS
 ########################
 
+def v_for(root_path, metafiles=None, **kwargs):
+    items = []
+    with open(metafiles, 'r', encoding='utf-8') as tsvfile:
+        tsvreader = csv.reader(tsvfile, delimiter='\t')
+        for row in tsvreader:
+            audio_path = row[0].strip()
+            speaker_name = row[1].strip()
+            text = row[2].strip() if len(row) > 2 else ""  # Extracting text if available
+            
+            if os.path.exists(audio_path):
+                items.append({
+                    "text": text,
+                    "audio_file": audio_path,
+                    "speaker_name": speaker_name,
+                    "root_path": root_path
+                })
+    
+    return items
+    
+
+
+
+
 
 def cml_tts(root_path, meta_file, ignored_speakers=None):
     """Normalizes the CML-TTS meta data file to TTS format
